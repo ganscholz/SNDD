@@ -9,37 +9,27 @@
  * Description:
  * </p>
  * <p>
- *       Please Maintain the Maintenance Section Below
- *  Date:
- *  Performed By:
- *  Reason:
+ *       This class defines the common used constants used in SNDD project. It is self-explanatory for each constant. 
  * </p>
  */
 
 package edu.syr.sndd.common.util;
 
-public class AppConstant {
-    //public static String BASE_CONFIG_FILE_NAME = "exportSolution.configuration.config";
-    public static String BASE_CONFIG_FILE_NAME = "config.properties";
-    public static String ACTION_FORM = "ACTION_FORM";
-    public static String LOGIN_END_URI = "LOGIN_END_URI";
-    
+public class AppConstant {    
     public static String DATETIME_DISPLAY_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static String DATE_DISPLAY_FORMAT = "yyyy-MM-dd";
     public static String EXCEL_DISPLAY = "EXCEL";
     public static String HTML_DISPLAY = "HTML";
     
-    public static final double SN_CONFIDENCE=0.999;
+    public static final double SN_CONFIDENCE = 0.999;
     public static final double SN_PARAMETER_ERROR=0.0001;
     
     public static final int DECIMAL_PLACE=4;
     
     public static double DT_THRESHOLD = 0.8;
     
-    //public static String INPUT_FILENAME = "C:\\dropbx\\Dropbox\\Stoney thesis docs\\chapter 2\\results-from-2012-03\\bosumtwi-proc-data-sorted.xlsx";    
-    //public static String OUTPUT_FILENAME = "C:\\dropbx\\Dropbox\\stoney thesis docs\\chapter 2\\results-from-2012-03\\bosumtwi-output-2014.txt";
-    public static String INPUT_FILENAME = "H:\\dissertation\\chapter2\\bosumtwi-proc-data-sorted.xlsx";    
-    public static String OUTPUT_FILENAME = "H:\\dissertation\\chapter2\\bosumtwi-output-2014.txt";
+    public static String INPUT_FILENAME = "src\\test\\bosumtwi-proc-data-sorted.xlsx";    
+    public static String OUTPUT_FILENAME = "src\\test\\bosumtwi-output-2014.txt";
 //    public static String INPUT_FILENAME = "H:\\dissertation\\chapter2\\Bruce-samples-proc-data.xlsx";    
 //    public static String OUTPUT_FILENAME = "H:\\dissertation\\chapter2\\Bruce-samples-output.txt";
 //    public static String INPUT_FILENAME = "H:\\dissertation\\chapter2\\VolPartitionResult.xlsx";    
