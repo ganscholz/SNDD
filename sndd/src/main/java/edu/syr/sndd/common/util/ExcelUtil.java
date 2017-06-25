@@ -28,8 +28,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
- *
- * @author eximlean
+ * Because our original GSD data are in Excel, this utility is to read the original data and
+ * possibly output the data to Excel format. It is an extention to HSSF package. 
+ * @author Stoney Q. Gan
  */
 public class ExcelUtil {
 
@@ -38,13 +39,17 @@ public class ExcelUtil {
     private static HSSFCellStyle shadeDataCellStyle = null;
     private static HSSFCellStyle normalDataCellStyle = null;
     
+    /**
+     *  A util method to create a new Excel file
+     * @param outfile
+     * @return
+     * @throws Exception
+     */
     public static HSSFWorkbook createNew(String outfile) throws Exception {
 
       FileInputStream in = new FileInputStream(outfile);
       HSSFWorkbook wb = new HSSFWorkbook(in);
-      //HSSFSheet sheet = wb.createSheet("SN");
-      //FileOutputStream out = new FileOutputStream(outfile);
-      
+ 
         try
         {
           HSSFFont titleCellFont = wb.createFont();

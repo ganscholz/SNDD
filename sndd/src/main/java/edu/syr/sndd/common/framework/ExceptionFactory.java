@@ -1,18 +1,9 @@
 /**
- * Class Name:   ExceptionFactory
- * Copyright:    Copyright (c) 2008
- * Date:         09/24/2008
- * Company:      ExportSolution, Inc.
+ * 
  * @author       Stoney Q. Gan
  * @version      1.0
  * <p>
  * Description:  Excepeption parser
- * </p>
- * <p>
- *       Please Maintain the Maintenance Section Below
- *  Date:
- *  Performed By:
- *  Reason:
  * </p>
  */
 
@@ -23,8 +14,7 @@ public class ExceptionFactory {
 	 * Convert a common error to the System customized GenericException. To be
 	 * updated...
 	 * 
-	 * @param e
-	 *            a common error
+	 * @param e an exception to catch.
 	 * @return our customized GenericException
 	 */
 	public static GenericException parse(Exception e) {
