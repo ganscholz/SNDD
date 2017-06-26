@@ -21,17 +21,19 @@ import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
 import edu.syr.sndd.processingSN.PartitionVolume;
-import edu.syr.sndd.readData.ReadGSData;
 /**
  * This is the class to draw graph from the partitioned data.
  * @author Stoney Q. Gan
  */
 
 public class GraphingData extends JPanel {
-    //double[] calSN = new double[AppConstant.dataPoint.length];
-    double[] nmodeSN = new double[AppConstant.dataPoint.length];
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	double[] nmodeSN = new double[AppConstant.dataPoint.length];
 
     protected double x_min, x_max, y_min, y_max;
     protected double gzData_xmin, gzData_xmax, gzData_ymin, gzData_ymax;
@@ -83,7 +85,7 @@ public class GraphingData extends JPanel {
     protected java.util.List<SNParameters> SNsnps;
     
     /**
-     * This method will read GSD data from the input file and 
+     * This is only construct which will read the original GSD data, and initializes SND structure.
      */
     public  GraphingData(){
         String fileName = AppConstant.INPUT_FILENAME;
@@ -143,25 +145,8 @@ public class GraphingData extends JPanel {
             g2.setPaint(Color.GREEN);
             double lastX=0, lastY=0;
             //this.getSnps(rowIndex);
-            if (drawSnps == null){
-                System.out.println("nothing to paint: snps is empty ...");
-                /*
-                double [] calSN = calculateSN(gzData_ymax);
-                for(int i = 0; i < AppConstant.dataPoint.length; i++) {
-                        double x = PAD + (AppConstant.dataPoint[i]-x_min)*xInc;
-                        double y = h - PAD - scale*calSN[i];
-                        g2.fill(new Ellipse2D.Double(x-2, y-2, 4, 4));
-                        if (i > 0){
-                            g2.draw(new Line2D.Double(lastX, lastY, x, y));
-
-                        } 
-
-                        lastX = x;
-                        lastY = y;
-                    }
-                 */
-            } else {
-                Iterator isn = drawSnps.iterator();
+            if (drawSnps != null){
+                Iterator<SNParameters> isn = drawSnps.iterator();
 
                 while (isn.hasNext()){
                     SNParameters sn = (SNParameters) isn.next();
@@ -270,18 +255,6 @@ public class GraphingData extends JPanel {
             }
             
             g2.drawString(YLABEL, 10, h/2);
-            
-            /* transformation will not respond to re-scale of window 
-            AffineTransform at = new AffineTransform();
-            at.setToRotation(-(Math.PI/2.0), w/2.0, h/2.0);
-            g2.setTransform(at);
-             * 
-             */
-            
-//            AffineTransform orig = g2.getTransform();          
-//            g2.rotate(-Math.PI/2);
-//            g2.drawString(YLABEL,  h/2, 100);
-//            g2.setTransform(orig);
             
         } catch (Exception ex) {
             Logger.getLogger(GraphingData.class.getName()).log(Level.SEVERE, null, ex);
@@ -396,7 +369,7 @@ protected void partitionSN(boolean stdz){
 
                 	// a set of SN parameter is added to the list.
                 listSnps.add(snps); // 2012-09-22 they will show when go next/prev for refinement....
-                Iterator itr = snps.iterator();
+                Iterator<SNParameters> itr = snps.iterator();
                 if (allData[i][0].equalsIgnoreCase(prevSampleName)){
                     sample_seq ++;
                 } else
@@ -424,7 +397,7 @@ protected void partitionSN(boolean stdz){
                 out.println();
                 out2.println();
             } catch (Exception ex) {
-                Logger.getLogger(SNFit.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SNND.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             prevSampleName = allData[i][0];
@@ -432,7 +405,7 @@ protected void partitionSN(boolean stdz){
         out.close();
         out2.close();
     } catch (IOException ex) {
-        Logger.getLogger(SNFit.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(SNND.class.getName()).log(Level.SEVERE, null, ex);
     } 
 }
     /**
@@ -713,7 +686,7 @@ protected void partitionSN(boolean stdz){
                 for (double a: nextResidualData)
                 	resTot += a;
                 
-                System.out.println("n refine: Y_MAX: " + y_max + " gzData_ymax " + gzData_ymax + " residual volume: " + resTot);
+                // System.out.println("n refine: Y_MAX: " + y_max + " gzData_ymax " + gzData_ymax + " residual volume: " + resTot);
                 
                 getMinMax(nextResidualData, Y);
                 //if (y_max/gzData_ymax > threshold ){
@@ -797,35 +770,6 @@ protected void partitionSN(boolean stdz){
         repaint();
     }
   
-    /**
-     * Set the parameters for the next literation including min, max and increment of each parameter, where min and max is the current value +- 2* increment value, 
-     * and the next increment value to 1/10 of current one.
-     * @param snp a set of sn parameters.
-     */
-  private void setRunParameters(SNParameters snp){
-    omega = snp.getOmega();
-    xi = snp.getXi();
-    alpha = snp.getAlpha();
-    omega_increment = snp.getOmega_increment();
-    xi_increment = snp.getXi_increment();
-    alpha_increment = snp.getAlpha_increment();
-    
-    omega_min = omega - 2*omega_increment;
-    if (omega_min < 0)
-        omega_min = 0.0001;
-
-    omega_max = omega + 2*omega_increment;
-
-    xi_min = xi - 2*xi_increment;
-    xi_max = xi + 2*xi_increment;
-
-    alpha_min = alpha - 2*alpha_increment;
-    alpha_max = alpha + 2*alpha_increment;
-
-    omega_increment /= 10.0;
-    xi_increment /= 10.0;
-    alpha_increment /= 10.0;      
-  }
   
   /**
    * add the current snp to a list of snps.
@@ -857,7 +801,7 @@ protected void partitionSN(boolean stdz){
           nmodeSN[i] = 0;
       }
       
-      Iterator sn = sns.iterator();
+      Iterator<SNParameters> sn = sns.iterator();
       while(sn.hasNext()){
           SNParameters snp = (SNParameters)sn.next();
           if (debug)
@@ -958,7 +902,7 @@ protected void partitionSN(boolean stdz){
      * @param asnps
      */
     public void printSnps(java.util.List<SNParameters> asnps){
-        Iterator itrSN = asnps.iterator();
+        Iterator<SNParameters> itrSN = asnps.iterator();
         
         int i=0;
         while (itrSN.hasNext()) {
@@ -1016,7 +960,6 @@ protected void partitionSN(boolean stdz){
     }
     
     public void printData(double [] adata){
-        int i=0;
         for (double a: adata) {
             //System.out.println(" data[i" + (i++) + "] :" + a);
             System.out.print(a + "\t");
@@ -1036,7 +979,7 @@ protected void partitionSN(boolean stdz){
     }
     
     protected void retrieveAndCalSnps(int rowData){
-        String sampleName = this.allData[rowData][0];
+        String sampleName = allData[rowData][0];
         this.replaySN = true;
     
         // find the first of this sample
@@ -1051,15 +994,13 @@ protected void partitionSN(boolean stdz){
         sampleName = sampleName.substring(6).toLowerCase() + "-" + sampleSeq; // remove "BOS5C "
         //String snSampleName = sampleName + "-" + (rowData - i + 1);
         
-        Iterator itr = this.listSnps.iterator();
-//        if (this.SNsnps != null)
-//             this.SNsnps.clear();
+        Iterator<java.util.List<SNParameters>> itr = listSnps.iterator();
         boolean notFound = true;
         foundSN = false;
         java.util.List<SNParameters> sns = new ArrayList<SNParameters>();
         while (notFound && itr.hasNext()){
-            sns = (java.util.List<SNParameters>)itr.next();
-            Iterator it = sns.iterator();
+            sns = itr.next();
+            Iterator<SNParameters> it = sns.iterator();
            
             if (it.hasNext()){
                 String snSampleName = ((SNParameters)it.next()).getSampleName().toLowerCase();
@@ -1071,37 +1012,5 @@ protected void partitionSN(boolean stdz){
                 }
             }
         }
- /*    
-        if (notFound){
-            this.foundSN = false;
-        } else {
-            this.foundSN = true;
-            itr = SNsnps.iterator();
-            i=0;
-            while (itr.hasNext()){
-                SNParameters p = (SNParameters) itr.next();
-                System.out.println("graphingData.java: " + p.getSampleName() + " row: " + rowData + " " + (i++) + "th: omega "
-                         + p.getOmega() + " " + p.getXi() + " " + p.getAlpha() + " " +  p.getfDataSN()
-                         + " maxGS " + p.getDataMax());     
-            }
-        }
-  * 
-  */
-    }
-    
-    public static void main(String[] args) {
-        JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //f.getContentPane().add(new GraphingData()); 
-        //f.getContentPane().add(new Slider());
-
-        //f.add(new Slider());
-       // f.add(new Slider());
-        f.add(new GraphingData());
-        
-        f.setSize(800,600);
-        //f.setLocation(200,200);
-        f.setVisible(true);
     }
 }

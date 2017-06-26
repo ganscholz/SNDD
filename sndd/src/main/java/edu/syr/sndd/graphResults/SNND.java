@@ -35,13 +35,15 @@ import javax.swing.JTextField;
  * This is the class that handles the graphics using awt. It reads the data file defined in the common.util.AppConstants and creates the GUI for the actions. 
  * Here is a short description of the buttons:
  * <li> Next Sample: simple display the grain size distribution (GSD) data of the next sample. </li>
- * <li> Prev Sample: go the previous sample. </li>
- * <li> Go to: enter the sample sequence number to jump to. </li>
+ * <li> Prev Sample: display GSD of the previous sample. </li>
+ * <li> Go to: display GSD of the n'th sample, e.g., go to 100 will display GSD of the 100'th sample. </li>
  * <li> Batch All: partition all samples in a batch mode. The result will be restore in the output specified in the common.util.AppConstants. </li>
- * <li> Auto SN Fit: partition the current sample. </li>
- * <li> Adj SN: 	 manually fit an SN by dragging the slide bars of SN parameters. This function is created for testing and allows users to refine an SN partition. </li>
- * <li> Refine fit:  use this button to partition the current GSD sample after manually fit an SN, i. e., it will honor the manually fitted SN's and partition the residual data. </li>
- * <li> stdz:		 Standardize all samples before processing using the first row as the standard. It is assumed that the first is the average GSD for all samples.</li>	
+ * <li> Auto SNND: SNDD the current sample. </li>
+ * <li> Adj SN: 	 manually fit an SN by adjusting the slide bars of SN parameters. This function is created for testing and allows users to refine an SN partition. </li>
+ * <li> Refine fit:  use this button to SNDD the current GSD sample after manually fit an SN, i. e., it will honor the manually fitted SN's and partition the residual data. If you want to
+ * 					 manually SNDD a sample, follow the following sequence: Auto SNND -> adjust slide bars to get your satisfied result for the dominant component -> Refine SNDD 
+ * 					 -> adjust slide bars to manually SNDD next component .... </li>
+ * <li> stdz:		 Standardize all samples before processing using the first row as the standard. It is assumed that the first is the average GSD for all samples. This button is rarely used.</li>	
  * <p>
  * slides for skew normal distribution parameters:
  * <li> \u03C9: scale parameter. </li>
@@ -52,7 +54,7 @@ import javax.swing.JTextField;
  * 
  *
  */
-public class SNFit extends JFrame {
+public class SNND extends JFrame {
 
     protected JLabel label;
     protected JSlider sliderOmega;
@@ -97,7 +99,7 @@ public class SNFit extends JFrame {
     protected static final String SNRESULT_FILENAME="SNResults.xlsx";
     protected int gotoIndex;
  
-    public SNFit() {
+    public SNND() {
     }
 
     /**
@@ -247,7 +249,7 @@ public class SNFit extends JFrame {
         JButton buttonBatch = new JButton("Batch All");
         p.add(buttonBatch);
         
-        JButton buttonAuto = new JButton("Auto SN Fit");
+        JButton buttonAuto = new JButton("Auto SNND");
         buttonAuto.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         p.add(buttonAuto);
 
@@ -266,7 +268,7 @@ public class SNFit extends JFrame {
         tmpJP.add(jtfMSNInput);
         p.add(tmpJP);
         
-        JButton buttonRefine = new JButton("Refine Fit");
+        JButton buttonRefine = new JButton("Refine SNND");
         buttonRefine.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         p.add(buttonRefine);
         
@@ -451,7 +453,7 @@ public class SNFit extends JFrame {
                 plotPanel.myRepaint();
 
             } catch (Exception ex) {
-                Logger.getLogger(SNFit.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SNND.class.getName()).log(Level.SEVERE, null, ex);
             }
             plotPanel.adjSN = 1;
         }
@@ -477,7 +479,7 @@ public class SNFit extends JFrame {
                 //plotPanel.calculateSN(plotPanel.gzData_ymax); 
                 plotPanel.myRepaint();
             } catch (Exception ex) {
-                Logger.getLogger(SNFit.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SNND.class.getName()).log(Level.SEVERE, null, ex);
             }
             plotPanel.adjSN = 1;
         }
@@ -501,7 +503,7 @@ public class SNFit extends JFrame {
                 //plotPanel.calculateSN(plotPanel.gzData_ymax); 
                 plotPanel.myRepaint();
             } catch (Exception ex) {
-                Logger.getLogger(SNFit.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SNND.class.getName()).log(Level.SEVERE, null, ex);
             }
             plotPanel.adjSN = 1;
             //plotPanel.manualSN = true;
@@ -517,7 +519,7 @@ public class SNFit extends JFrame {
             try {
                 ExcelUtil.appendSNResultToExcel(SNRESULT_FILENAME, plotPanel.snps);
             } catch (Exception ex) {
-                Logger.getLogger(SNFit.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SNND.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     };
@@ -601,7 +603,7 @@ public class SNFit extends JFrame {
                 plotPanel.standardizeGZData();
                 plotPanel.partitionSN(true);
             } catch (Exception ex) {
-                Logger.getLogger(SNFit.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SNND.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -697,7 +699,7 @@ public class SNFit extends JFrame {
      * @param za
      */
     public static void main(String[] za) {
-        SNFit d = new SNFit();
+        SNND d = new SNND();
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(d.getContent());
